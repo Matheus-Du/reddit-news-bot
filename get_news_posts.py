@@ -2,17 +2,29 @@ from warnings import simplefilter
 from dotenv import load_dotenv
 import os
 import praw
-import tkinter
+import tkinter as tk
+from tkinter import Label, Listbox, ttk, font
 
 MAX_POSTS = 20
 load_dotenv('.env')
 
 
-def main():
-    reddit = get_reddit()
-    subreddit = reddit.subreddit("news")
-    posts = get_hot_posts(subreddit)
-    print_posts(posts)
+class Application(tk.Frame):
+    def __init__(self, posts, master=None):
+        super().__init__(master)
+        self.master = master
+        self.posts = posts
+        self.pack()
+        self.create_widgets()
+
+    def create_widgets(self):
+        self.labels = []
+        for i in range(MAX_POSTS):
+            self.label = tk.Label(self, text=self.posts[i].title + "\n" + self.posts[i].permalink)
+            self.label.pack(side="top", anchor='w')
+            self.labels.append(self.label)
+            
+
 
 
 def get_reddit():
@@ -25,7 +37,6 @@ def get_reddit():
     )
     return reddit
 
-
 def get_hot_posts(subreddit):
     posts = [None] * MAX_POSTS
     i = 0
@@ -34,7 +45,6 @@ def get_hot_posts(subreddit):
         posts[i] = Post(submission.title, submission.permalink, submission.selftext, submission.url, submission.score)
         i += 1
     return posts
-
 
 def print_posts(posts):
     # print posts along with info (subtext/permalink)
@@ -45,7 +55,6 @@ def print_posts(posts):
         else:
             print("\t{}\n".format(post.selftext))
 
-
 class Post:
     # Post class creates an instance of a post on the subreddit along with some important info (i.e. subtext)
     def __init__(self, title, permalink, selftext, url, score):
@@ -54,6 +63,15 @@ class Post:
         self.selftext = selftext
         self.url = url
         self.score = score
+        
+def main():
+    reddit = get_reddit()
+    subreddit = reddit.subreddit("news")
+    posts = get_hot_posts(subreddit)
+    print_posts(posts)
 
+    root = tk.Tk()
+    app = Application(posts, master=root)
+    app.mainloop()
 
 main()
