@@ -2,6 +2,7 @@ from warnings import simplefilter
 from dotenv import load_dotenv
 import os
 import praw
+import tkinter
 
 MAX_POSTS = 20
 load_dotenv('.env')
