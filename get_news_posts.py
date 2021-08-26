@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import os
 import praw
+MAX_POSTS = 20
 
 load_dotenv('.env')
 
@@ -14,5 +15,16 @@ reddit = praw.Reddit(
 
 subreddit = reddit.subreddit("news")
 
-for submission in subreddit.hot(limit=20):
-    print("{} \n\t{} \n".format(submission.title, submission.url))
+class Post:
+    def __init__(self, title, permalink, url, score):
+        self.title = title
+        self.permalink = permalink
+        self.url = url
+        self.score = score
+
+posts = [None] * MAX_POSTS
+i = 0
+for submission in subreddit.hot(limit=MAX_POSTS):
+    posts[i] = Post(submission.title, submission.permalink, submission.url, submission.score)
+    print("{} \n\t{} \n".format(posts[i].title, posts[i].url))
+    i += 1
