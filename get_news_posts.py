@@ -33,7 +33,6 @@ class Application(tk.Frame):
 
     def create_widgets(self):
         # create the labels & buttons to display top hot posts & visit article
-        # TODO: simplify so user just needs to click the label to visit the site
         labels = []
         for i in range(MAX_POSTS):
             label = tk.Label(self, text=self.posts[i].title + "\nwww.reddit.com" + self.posts[i].permalink, cursor="hand2")
@@ -101,6 +100,7 @@ def main():
 
     # setup the application window & main loop
     root = tk.Tk()
+    root.title("Reddit News Tracker")
     app = Application(subreddit, master=root)
     app.mainloop()
 
