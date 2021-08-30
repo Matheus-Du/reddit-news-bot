@@ -1,3 +1,4 @@
+from logging import root
 from warnings import simplefilter
 from dotenv import load_dotenv
 import os
@@ -12,13 +13,23 @@ load_dotenv('.env')
 
 class Application(tk.Frame):
 
-    def __init__(self, posts, master=None):
-        # initialize Application window along with a list of posts (instances of the Post class corresponding to hot posts on subreddit)
+    def __init__(self, subreddit, master=None):
+        # initialize Application window along with a list of posts (instances of the Post class)
         super().__init__(master)
         self.master = master
-        self.posts = posts
+        self.subreddit = subreddit
+        self.posts = []
         self.pack()
+        self.get_hot_posts()
         self.create_widgets()
+
+    def get_hot_posts(self):
+        # get the top x posts from a given subreddit (set to 20 by default)
+        i = 0
+        for submission in self.subreddit.hot(limit=MAX_POSTS):
+            # traverse through the top x posts in r/news, store them in an instance of Post, & display basic info on each
+            self.posts.append(Post(submission.title, submission.permalink, submission.selftext, submission.url, submission.score))
+            i += 1
 
     def create_widgets(self):
         # create the labels & buttons to display top hot posts & visit article
@@ -52,6 +63,16 @@ class Application(tk.Frame):
         labels[18].bind("<Button-1>", lambda e: webbrowser.open(self.posts[18].url))
         labels[19].bind("<Button-1>", lambda e: webbrowser.open(self.posts[19].url))
 
+        # menu bar containing a refresh button
+        menubar = Menu(self)
+        menubar.add_command(label="Refresh", command = self.refresh)
+        self.master.config(menu=menubar)
+
+    def refresh(self):
+        # destroys the current window & initializes a new one
+        self.destroy()
+        self.__init__(self.subreddit, self.master)
+
 
 def get_reddit():
     # get the credentials of the reddit user & bot
@@ -63,25 +84,6 @@ def get_reddit():
         client_secret = os.getenv('BOT_CLIENT_SECRET'),
     )
     return reddit
-
-def get_hot_posts(subreddit):
-    # get the top x posts from a given subreddit (set to 20 by default)
-    posts = []
-    i = 0
-    for submission in subreddit.hot(limit=MAX_POSTS):
-        # traverse through the top x posts in r/news, store them in an instance of Post, & display basic info on each
-        posts.append(Post(submission.title, submission.permalink, submission.selftext, submission.url, submission.score))
-        i += 1
-    return posts
-
-def print_posts(posts):
-    # print posts along with info (subtext/permalink)
-    for post in posts:
-        print(post.title)
-        if not post.selftext:
-            print("\t{}\n".format(post.url))
-        else:
-            print("\t{}\n".format(post.selftext))
 
 class Post:
     # Post class creates an instance of a post on the subreddit along with some important info (i.e. subtext)
@@ -96,12 +98,10 @@ def main():
     # get the reddit credentials, then the subreddit to be scrapped, then get the posts & send them to the application window
     reddit = get_reddit()
     subreddit = reddit.subreddit("news")
-    posts = get_hot_posts(subreddit)
-    print_posts(posts)
 
     # setup the application window & main loop
     root = tk.Tk()
-    app = Application(posts, master=root)
+    app = Application(subreddit, master=root)
     app.mainloop()
 
 main()
