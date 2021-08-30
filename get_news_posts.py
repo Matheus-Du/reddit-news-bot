@@ -24,36 +24,33 @@ class Application(tk.Frame):
         # create the labels & buttons to display top hot posts & visit article
         # TODO: simplify so user just needs to click the label to visit the site
         labels = []
-        buttons = [NONE] * MAX_POSTS
         for i in range(MAX_POSTS):
-            label = tk.Label(self, text=self.posts[i].title + "\nwww.reddit.com" + self.posts[i].permalink)
+            label = tk.Label(self, text=self.posts[i].title + "\nwww.reddit.com" + self.posts[i].permalink, cursor="hand2")
             label.grid(row=i, column=0, sticky=W, pady=1)
             labels.append(label)
-            buttons[i] = tk.Button(self, text="link")
-            buttons[i].grid(row=i, column=1, sticky=E, pady=1, padx=2)
         
         # TODO: this needs to be a loop for best-practice
-        # update the link for each button to open the correct article
-        buttons[0].configure(command = lambda: webbrowser.open(self.posts[0].url))
-        buttons[1].configure(command = lambda: webbrowser.open(self.posts[1].url))
-        buttons[2].configure(command = lambda: webbrowser.open(self.posts[2].url))
-        buttons[3].configure(command = lambda: webbrowser.open(self.posts[3].url))
-        buttons[4].configure(command = lambda: webbrowser.open(self.posts[4].url))
-        buttons[5].configure(command = lambda: webbrowser.open(self.posts[5].url))
-        buttons[6].configure(command = lambda: webbrowser.open(self.posts[6].url))
-        buttons[7].configure(command = lambda: webbrowser.open(self.posts[7].url))
-        buttons[8].configure(command = lambda: webbrowser.open(self.posts[8].url))
-        buttons[9].configure(command = lambda: webbrowser.open(self.posts[9].url))
-        buttons[10].configure(command = lambda: webbrowser.open(self.posts[10].url))
-        buttons[11].configure(command = lambda: webbrowser.open(self.posts[11].url))
-        buttons[12].configure(command = lambda: webbrowser.open(self.posts[12].url))
-        buttons[13].configure(command = lambda: webbrowser.open(self.posts[13].url))
-        buttons[14].configure(command = lambda: webbrowser.open(self.posts[14].url))
-        buttons[15].configure(command = lambda: webbrowser.open(self.posts[15].url))
-        buttons[16].configure(command = lambda: webbrowser.open(self.posts[16].url))
-        buttons[17].configure(command = lambda: webbrowser.open(self.posts[17].url))
-        buttons[18].configure(command = lambda: webbrowser.open(self.posts[18].url))
-        buttons[19].configure(command = lambda: webbrowser.open(self.posts[19].url))
+        # update the link for each label to open the correct article
+        labels[0].bind("<Button-1>", lambda e: webbrowser.open(self.posts[0].url))
+        labels[1].bind("<Button-1>", lambda e: webbrowser.open(self.posts[1].url))
+        labels[2].bind("<Button-1>", lambda e: webbrowser.open(self.posts[2].url))
+        labels[3].bind("<Button-1>", lambda e: webbrowser.open(self.posts[3].url))
+        labels[4].bind("<Button-1>", lambda e: webbrowser.open(self.posts[4].url))
+        labels[5].bind("<Button-1>", lambda e: webbrowser.open(self.posts[5].url))
+        labels[6].bind("<Button-1>", lambda e: webbrowser.open(self.posts[6].url))
+        labels[7].bind("<Button-1>", lambda e: webbrowser.open(self.posts[7].url))
+        labels[8].bind("<Button-1>", lambda e: webbrowser.open(self.posts[8].url))
+        labels[9].bind("<Button-1>", lambda e: webbrowser.open(self.posts[9].url))
+        labels[10].bind("<Button-1>", lambda e: webbrowser.open(self.posts[10].url))
+        labels[11].bind("<Button-1>", lambda e: webbrowser.open(self.posts[11].url))
+        labels[12].bind("<Button-1>", lambda e: webbrowser.open(self.posts[12].url))
+        labels[13].bind("<Button-1>", lambda e: webbrowser.open(self.posts[13].url))
+        labels[14].bind("<Button-1>", lambda e: webbrowser.open(self.posts[14].url))
+        labels[15].bind("<Button-1>", lambda e: webbrowser.open(self.posts[15].url))
+        labels[16].bind("<Button-1>", lambda e: webbrowser.open(self.posts[16].url))
+        labels[17].bind("<Button-1>", lambda e: webbrowser.open(self.posts[17].url))
+        labels[18].bind("<Button-1>", lambda e: webbrowser.open(self.posts[18].url))
+        labels[19].bind("<Button-1>", lambda e: webbrowser.open(self.posts[19].url))
 
 
 def get_reddit():
